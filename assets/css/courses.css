@@ -1,0 +1,88 @@
+.courses-section {
+  padding: 90px 8%;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.9),
+      rgba(255, 255, 255, 0.9)
+    ),
+    url("campus-bg.jpg") center/cover no-repeat;
+}
+
+/* HEADER */
+.courses-header {
+  max-width: 750px;
+  margin-bottom: 60px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.section-line {
+  width: 4px;
+  height: 60px;
+  background: #c41e3a;
+  margin-top: 8px;
+}
+
+.courses-header h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 34px;
+  color: #003a8f;
+  line-height: 1.3;
+}
+
+/* GRID */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+}
+
+/* CARD */
+.course-card {
+  background: white;
+  padding: 45px 35px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+}
+
+.course-card h3 {
+  font-size: 30px;
+  color: #003a8f;
+  margin-bottom: 18px;
+  font-family: "Playfair Display", serif;
+}
+
+.course-card p {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 35px;
+}
+
+/* LINK */
+.course-card a {
+  font-weight: 700;
+  font-size: 15px;
+  color: #003a8f;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.course-card a span {
+  width: 28px;
+  height: 28px;
+  background: #003a8f;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
