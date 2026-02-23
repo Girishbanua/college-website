@@ -1,0 +1,95 @@
+/* Section Background Gradient */
+.success-section {
+  padding: 60px 8%;
+  background: linear-gradient(120deg, #2f2f6d, #3a6ea5, #49c0c3);
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Header */
+.courses-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 50px;
+}
+
+.courses-header h1 {
+  color: #ffffff;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+/* Red Line */
+.section-line {
+  width: 6px;
+  height: 40px;
+  background: #ff2d2d;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+/* Cards Container */
+.featured {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: 0.3s ease;
+  position: relative;
+}
+
+/* Hover Effect */
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Image */
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Content */
+.card-content {
+  padding: 20px;
+}
+
+/* Title */
+.card-content h3 {
+  font-size: 18px;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+/* Link */
+.card-content a {
+  text-decoration: none;
+  color: #1d4ed8;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.card-content a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .courses-header h1 {
+    font-size: 28px;
+  }
+
+  .section-line {
+    height: 30px;
+  }
+}

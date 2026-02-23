@@ -11,14 +11,15 @@ if (isset($_POST['login'])) {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['id'];
+        $uid = $user['id'];
         $_SESSION['role'] = $user['role'];
         $message = "";
         if ($user['role'] == 'student') {
-            header("Location: student/dashboard.php");
+            header("Location: student/");
         } elseif ($user['role'] == 'faculty') {
-            header("Location: faculty/dashboard.php");
+            header("Location: faculty?$uid");
         } elseif ($user['role'] == 'admin') {
-            header("Location: admin/dashboard.php");
+            header("Location: admin/");
         }
         exit();
     } else {

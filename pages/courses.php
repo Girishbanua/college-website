@@ -5,59 +5,27 @@
     </div>
 
     <div class="courses-grid">
-        <div class="course-card">
-            <h3>Arts</h3>
-            <p>
-                A broad foundation in humanities and social sciences that develops
-                critical thinking, creativity, and communication skills.
-            </p>
-            <a href="#">
-                Learn More <span>→</span>
-            </a>
-        </div>
+        <?php
+        $stmnt = "SELECT * from honours";
+        $result = mysqli_query($conn, $stmnt);
 
-        <div class="course-card">
-            <h3>Science</h3>
+        while ($row = mysqli_fetch_assoc($result)) {
+            $id = $row['honours_id'];
+            $honours = $row['honours_name'];
+            $desc = $row['honours_description'];
+            echo "
+                
+        <div class='course-card'>
+            <h3> $honours </h3>
             <p>
-                Programs designed to build analytical, experimental, and research
-                skills across core scientific disciplines.
+                $desc                
             </p>
-            <a href="#">
+            <a href='pages/department.php?id=$id'>
                 Learn More <span>→</span>
             </a>
         </div>
-
-        <div class="course-card">
-            <h3>Commerce</h3>
-            <p>
-                Strong grounding in accounting, finance, economics, and business
-                principles for future professionals.
-            </p>
-            <a href="#">
-                Learn More <span>→</span>
-            </a>
-        </div>
-
-        <div class="course-card">
-            <h3>BBA</h3>
-            <p>
-                Industry-oriented business administration program focusing on
-                leadership, management, and entrepreneurship.
-            </p>
-            <a href="#">
-                Learn More <span>→</span>
-            </a>
-        </div>
-
-        <div class="course-card">
-            <h3>BCA</h3>
-            <p>
-                A technology-driven program covering computer applications, software
-                development, and modern IT practices.
-            </p>
-            <a href="#">
-                Learn More <span>→</span>
-            </a>
-        </div>
+            ";
+        }
+        ?>
     </div>
 </section>

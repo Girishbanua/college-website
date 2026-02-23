@@ -1,0 +1,94 @@
+/* Section */
+.message-section {
+  background: #f8fafc;
+  padding: 60px 20px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* Header */
+.section-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-header h2 {
+  font-size: 32px;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+.section-header p {
+  color: #6b7280;
+}
+
+/* Grid */
+.message-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+/* Card */
+.message-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.message-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Image */
+.message-image img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+/* Content */
+.message-content {
+  padding: 20px;
+}
+
+.message-content h3 {
+  color: #1e40af;
+  margin-bottom: 10px;
+}
+
+.message-content p {
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.message-content h4 {
+  margin: 0;
+  color: #111827;
+}
+
+.message-content span {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* Highlight */
+.highlight {
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .message-grid {
+    grid-template-columns: 1fr;
+  }
+}
