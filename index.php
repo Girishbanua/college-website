@@ -67,7 +67,7 @@ include "./includes/db.php";
         <ul class="nav-links">
             <li><a href="#">Home</a></li>
             <li><a href="#about">About</a></li>
-            <li class="dropdown"><a href="#about">Academics</a>
+            <li class="dropdown"><a href="#academics">Academics</a>
                 <ul class="dropdown-menu">
                     <?php
                     $stmnt = mysqli_query($conn, "SELECT * FROM department");
@@ -81,7 +81,6 @@ include "./includes/db.php";
 
                 </ul>
             </li>
-            <li><a href="#courses">Courses</a></li>
             <li><a href="./pages/Gallery.php">Gallery</a></li>
             <li><a href="#news">News</a></li>
             <li><a href="./pages/contact.php">Contact</a></li>

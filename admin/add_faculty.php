@@ -3,56 +3,106 @@ require_once "../includes/db.php";
 
 if (isset($_POST['add_faculty'])) {
 
-    // Sanitize input
-    $fname = mysqli_real_escape_string($conn, $_POST['first_name']);
-    $lname = mysqli_real_escape_string($conn, $_POST['last_name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $phone = $_POST['phone'];
+    // =========================
+    // SANITIZE INPUT
+    // =========================
+    $fname = trim($_POST['first_name']);
+    $lname = trim($_POST['last_name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
     $gender = $_POST['gender'];
-    $department = $_POST['department'];
-    $joining = $_POST['joining'];
+    $department = (int)$_POST['department'];
+    $qualification = $_POST['qualification'];
+    $joining = (int)$_POST['joining'];
     $designation = $_POST['designation'];
-    $experience = $_POST['experience'];
-    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $experience = (int)$_POST['experience'];
+    $address = trim($_POST['address']);
 
-    // Password hash 🔒
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $full_name = $fname . " " . $lname;
 
-    /* =========================
-       IMAGE UPLOAD
-    ========================= */
-    $imageName = $_FILES['image']['name'];
-    $tmp = $_FILES['image']['tmp_name'];
+    // =========================
+    // CHECK DUPLICATE EMAIL
+    // =========================
+    $check = $conn->prepare("SELECT id FROM users WHERE email = ?");
+    $check->bind_param("s", $email);
+    $check->execute();
+    $result = $check->get_result();
 
-    if (!empty($imageName)) {
+    if ($result->num_rows > 0) {
+        echo "<script>alert('Email already exists');</script>";
+        exit;
+    }
+
+    // =========================
+    // IMAGE UPLOAD
+    // =========================
+    $newImage = NULL;
+
+    if (!empty($_FILES['image']['name'])) {
+
+        $imageName = $_FILES['image']['name'];
+        $tmp = $_FILES['image']['tmp_name'];
+        $size = $_FILES['image']['size'];
 
         $ext = strtolower(pathinfo($imageName, PATHINFO_EXTENSION));
 
-        if (in_array($ext, ['jpg', 'jpeg', 'png'])) {
-
-            $newImage = time() . "_" . $imageName;
-            $target = "../assets/images/faculty/" . $newImage;
-
-            move_uploaded_file($tmp, $target);
-        } else {
-            echo "<script>alert('Only JPG, PNG allowed');</script>";
+        if (!in_array($ext, ['jpg', 'jpeg', 'png'])) {
+            echo "<script>alert('Only JPG, JPEG, PNG allowed');</script>";
             exit;
         }
-    } else {
-        $newImage = NULL;
+
+        if ($size > 2 * 1024 * 1024) { // 2MB
+            echo "<script>alert('File too large (Max 2MB)');</script>";
+            exit;
+        }
+
+        $newImage = uniqid() . "." . $ext;
+        $target = "../assets/images/faculty/" . $newImage;
+
+        if (!move_uploaded_file($tmp, $target)) {
+            echo "<script>alert('Image upload failed');</script>";
+            exit;
+        }
     }
 
-    /* =========================
-       INSERT INTO DATABASE
-    ========================= */
-    $stmt = $conn->prepare("INSERT INTO faculty 
-    (first_name, last_name, email, phone, gender, department_id, joining_year, designation, experience_years, address, photo) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    // =========================
+    // TRANSACTION START
+    // =========================
+    $conn->begin_transaction();
 
-    if ($stmt) {
+    try {
+
+        // =========================
+        // INSERT USER
+        // =========================
+        $user_stmt = $conn->prepare(
+            "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)"
+        );
+
+        $role = "faculty";
+        $user_stmt->bind_param("ssss", $full_name, $email, $password, $role);
+        $user_stmt->execute();
+
+        // GET INSERTED ID
+        $user_id = $conn->insert_id;
+
+        // CREATE FACULTY CODE
+        $fcode = "FAC" . $user_id;
+
+        // =========================
+        // INSERT FACULTY
+        // =========================
+        $stmt = $conn->prepare(
+            "INSERT INTO faculty 
+            (faculty_code, first_name, last_name, email, phone, gender, department_id, joining_year, 
+            qualification, designation, experience_years, address, photo) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        );
 
         $stmt->bind_param(
-            "ssssssissss",
+            "ssssssiississ",
+            $fcode,
             $fname,
             $lname,
             $email,
@@ -60,26 +110,27 @@ if (isset($_POST['add_faculty'])) {
             $gender,
             $department,
             $joining,
+            $qualification,
             $designation,
             $experience,
             $address,
-            $newImage,
+            $newImage
         );
 
-        if ($stmt->execute()) {
+        $stmt->execute();
 
-            if ($stmt->affected_rows > 0) {
-                echo "<script>alert('Faculty added successfully');</script>";
-            } else {
-                echo "<script>alert('Insert failed');</script>";
-            }
-        } else {
-            echo "Execute Error: " . $stmt->error;
-        }
+        // =========================
+        // COMMIT
+        // =========================
+        $conn->commit();
 
-        $stmt->close();
-    } else {
-        echo "Prepare Error: " . $conn->error;
+        echo "<script>alert('Faculty added successfully');</script>";
+    } catch (Exception $e) {
+
+        // ROLLBACK
+        $conn->rollback();
+
+        echo "Error: " . $e->getMessage();
     }
 }
 ?>
@@ -92,17 +143,17 @@ if (isset($_POST['add_faculty'])) {
         <input type="text" name="last_name" placeholder="Last name" required>
 
         <input type="email" name="email" placeholder="Email" required>
-        <input type="number" name="phone" placeholder="Phone Number" required>
+        <input type="text" name="phone" placeholder="Phone Number" required>
 
         <div>
             <label><input type="radio" value="male" name="gender" required> Male</label>
             <label><input type="radio" value="female" name="gender"> Female</label>
         </div>
 
-        <select name="" id="">
+        <select name="qualification" id="">
             <option value="">Qualification</option>
-            <option value="">Post Graduate</option>
-            <option value="">Doctorate(Phd.)</option>
+            <option value="Post Graduate">Post Graduate</option>
+            <option value="Doctorate(Phd.)">Doctorate(Phd.)</option>
         </select>
 
         <select name="department" required>
@@ -120,7 +171,7 @@ if (isset($_POST['add_faculty'])) {
         </select>
 
         <small>Joining year</small>
-        <input type="number" name="joining" placeholder="Joining year">
+        <input type="number" name="joining" min="2000" max="2026" placeholder="year of Joining ">
 
         <select name="designation">
             <option value="">Designation</option>
@@ -139,4 +190,8 @@ if (isset($_POST['add_faculty'])) {
         <button type="submit" name="add_faculty">Create User</button>
 
     </form>
+</div>
+
+<div class="card">
+
 </div>

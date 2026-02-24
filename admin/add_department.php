@@ -43,6 +43,7 @@ if (isset($_POST['add_department'])) {
     }
 }
 ?>
+
 <div class="card">
     <h3>➕ Add Department</h3>
 
@@ -76,4 +77,40 @@ if (isset($_POST['add_department'])) {
         <button type="submit" name="add_department">Add Department</button>
 
     </form>
+</div>
+
+<div class="card" style="width: 600px; ">
+    <table>
+        <thead>
+            <tr>
+                <th>Department Name</th>
+                <th>Strength</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+
+            $stmnt = "SELECT * FROM department";
+            $result = mysqli_query($conn, $stmnt);
+
+            while ($row = mysqli_fetch_assoc($result)) {
+                $dept = $row['department_name'];
+            ?>
+                <tr>
+                    <td><?= $dept ?></td>
+                    <td>10</td>
+                    <td>
+                        <button class='btn danger'
+                            onclick="confirm('Warning!! Deleting a department! It will delete all the data related to this department. Are u sure?')">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            <?php }
+            ?>
+        </tbody>
+    </table>
+
+</div>
 </div>

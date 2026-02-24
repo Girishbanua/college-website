@@ -8,20 +8,23 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'faculty') {
 }
 
 if (isset($_POST['upload'])) {
-    $courseId = $_POST['course_id'];
+
     $facultyId = $_SESSION['user_id'];
+    $department_id = $_POST['department'];
+    $notes_title = $_POST['notes_title'];
 
     $fileName = $_FILES['note_file']['name'];
     $tmpName = $_FILES['note_file']['tmp_name'];
 
-    $targetDir = "../uploads/";
+    $targetDir = "../uploads/notes/";
     $targetFile = $targetDir . basename($fileName);
 
     if (move_uploaded_file($tmpName, $targetFile)) {
-        mysqli_query($conn, "INSERT INTO notes (faculty_id, course_id, file) 
-                             VALUES ($facultyId, $courseId, '$fileName')");
-        header("Location: dashboard.php");
+        mysqli_query($conn, "INSERT INTO notes (faculty_id, file, department_id, notes_title) 
+                             VALUES ($facultyId, '$fileName', $department_id , '$notes_title' )");
+        echo "<script>alert('File uploaded.')</script>";
+        header("Location: index.php");
     } else {
-        echo "File upload failed.";
+        echo "<script>alert('File upload failed.')</script>";
     }
 }

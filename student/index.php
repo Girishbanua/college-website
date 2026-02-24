@@ -49,6 +49,14 @@ $notesQuery = mysqli_query($conn, "
             text-transform: capitalize;
         }
 
+        aside h2 {
+            transition: all ease-in-out 0.3s;
+        }
+
+        aside h2:hover {
+            transform: scale(1.05px);
+        }
+
         .container {
             padding: 20px;
         }
@@ -89,55 +97,67 @@ $notesQuery = mysqli_query($conn, "
 
     <header class="header">
         <img src="../assets/images/logo.png" alt="logo" id="logo">
-        <div>
+        <div style="display: flex;align-items: center;gap: 15px;">
             <h2>Welcome, <?= htmlspecialchars($user['name']) ?></h2>
-            <img src="../assets/images/students/profile.png" alt="profile picture">
-            <a href="../logout.php" class="logout">Logout</a>
+            <img src="../assets/images/students/profile.png" alt="profile picture" style="width: 60px;">
+            <a href="../logout.php" class="logout" onclick="return confirm('Do you really want to logout?')">Logout</a>
         </div>
     </header>
-    <div class="container">
+    <main>
+        <aside>
+            <h2>Quick Links</h2>
+            <h2>Quiz</h2>
+            <h2>My Teachers</h2>
+            <h2>My classmates</h2>
+            <h2>news</h2>
+        </aside>
+        <div class="container">
+            <div class="card">
+                <h3>Notice Board</h3>
+            </div>
+            <div class="card">
+                <h3>📚 Enrolled Courses</h3>
+                <ul>
+                    <?php while ($course = mysqli_fetch_assoc($coursesQuery)) { ?>
+                        <li><?= htmlspecialchars($course['title']) ?></li>
+                    <?php } ?>
+                </ul>
+                <?php if (mysqli_num_rows($coursesQuery) == 0) echo "<p>No courses enrolled yet.</p>"; ?>
+            </div>
 
-        <div class="card">
-            <h3>📚 Enrolled Courses</h3>
-            <ul>
-                <?php while ($course = mysqli_fetch_assoc($coursesQuery)) { ?>
-                    <li><?= htmlspecialchars($course['title']) ?></li>
-                <?php } ?>
-            </ul>
-            <?php if (mysqli_num_rows($coursesQuery) == 0) echo "<p>No courses enrolled yet.</p>"; ?>
-        </div>
-
-        <div class="card">
-            <h3>📝 Your Marks</h3>
-            <table>
-                <tr>
-                    <th>Course</th>
-                    <th>Marks</th>
-                </tr>
-                <?php while ($mark = mysqli_fetch_assoc($marksQuery)) { ?>
+            <div class="card">
+                <h3>📝 Your Marks</h3>
+                <table>
                     <tr>
-                        <td><?= htmlspecialchars($mark['title']) ?></td>
-                        <td><?= htmlspecialchars($mark['marks']) ?></td>
+                        <th>Course</th>
+                        <th>Marks</th>
                     </tr>
-                <?php } ?>
-            </table>
-            <?php if (mysqli_num_rows($marksQuery) == 0) echo "<p>No marks available yet.</p>"; ?>
-        </div>
+                    <?php while ($mark = mysqli_fetch_assoc($marksQuery)) { ?>
+                        <tr>
+                            <td><?= htmlspecialchars($mark['title']) ?></td>
+                            <td><?= htmlspecialchars($mark['marks']) ?></td>
+                        </tr>
+                    <?php } ?>
+                </table>
+                <?php if (mysqli_num_rows($marksQuery) == 0) echo "<p>No marks available yet.</p>"; ?>
+            </div>
 
-        <div class="card">
-            <h3>📥 Download Notes</h3>
-            <ul>
-                <?php while ($note = mysqli_fetch_assoc($notesQuery)) { ?>
-                    <li>
-                        <?= htmlspecialchars($note['title']) ?> -
-                        <a href="../uploads/<?= $note['file'] ?>" target="_blank">Download</a>
-                    </li>
-                <?php } ?>
-            </ul>
-            <?php if (mysqli_num_rows($notesQuery) == 0) echo "<p>No notes uploaded yet.</p>"; ?>
-        </div>
+            <div class="card">
+                <h3>📥 Download Notes</h3>
+                <ul>
+                    <?php while ($note = mysqli_fetch_assoc($notesQuery)) { ?>
+                        <li>
+                            <?= htmlspecialchars($note['title']) ?> -
+                            <a href="../uploads/<?= $note['file'] ?>" target="_blank">Download</a>
+                        </li>
+                    <?php } ?>
+                </ul>
+                <?php if (mysqli_num_rows($notesQuery) == 0) echo "<p>No notes uploaded yet.</p>"; ?>
+            </div>
 
-    </div>
+        </div>
+    </main>
+
 
 </body>
 

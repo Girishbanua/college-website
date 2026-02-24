@@ -1,0 +1,52 @@
+.department_container {
+  margin-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 30px 0;
+}
+
+/* Card Container */
+.container {
+  width: 400px;
+  padding: 40px;
+
+  /* Glass Effect */
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: -14px 10px 31px -14px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  border: 1px solid #2563eb1c;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+
+  /* Gradient Text */
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dept-box {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.1);
+  transition: 0.3s;
+}
+
+.dept-box:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dept-name {
+  font-size: 22px;
+  font-weight: 500;
+}
