@@ -104,10 +104,12 @@
         while ($row = mysqli_fetch_assoc($result)) {
             $dept = $row['department_name'];
             $desc = $row['department_description'];
+            $img = $row['logo'];
 
             echo " <div class='container'> <h1>Department of $dept</h1>
              <div class='dept-box'>
              <p class='dept-name'>$desc</p>
+             <img src='../assets/images/department_logos/$img' alt='$dept' style='width:150px; margin-top:30px;'>
              </div> 
              </div>";
         }

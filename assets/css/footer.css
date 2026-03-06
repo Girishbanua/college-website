@@ -7,8 +7,9 @@
 
 /* TOP GRID */
 .footer-top {
-  display: grid;
-  grid-template-columns: 1.5fr 1.2fr 1fr 1fr;
+  /* display: grid;
+  grid-template-columns: 1.5fr 1.2fr 1fr 1fr; */
+  display: flex;
   gap: 60px;
   margin-bottom: 50px;
 }
@@ -111,4 +112,10 @@
 .footer-links a {
   font-size: 14px;
   color: #002b6b;
+}
+
+@media screen and (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+  }
 }

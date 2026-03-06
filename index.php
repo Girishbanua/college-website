@@ -54,6 +54,11 @@ include "./includes/db.php";
         .dropdown:hover .dropdown-menu {
             display: block;
         }
+
+        .academics-section {
+            background: linear-gradient(120deg, #ffffffdb, #ffffffce, #49c0c385), url(assets/images/20250825_102207.jpg);
+            background-size: cover;
+        }
     </style>
 </head>
 
@@ -82,23 +87,12 @@ include "./includes/db.php";
                 </ul>
             </li>
             <li><a href="./pages/Gallery.php">Gallery</a></li>
-            <li><a href="#news">News</a></li>
-            <li><a href="./pages/contact.php">Contact</a></li>
+            <li><a href="./pages/NewsLetter.php">News letter</a></li>
+            <li><a href="#contact">Contact</a></li>
             <li><a href="./login.php">Faculty</a></li>
         </ul>
         <a href="login.php" class="btn">Get Started</a>
     </nav>
-    <!-- Hero Section -->
-    <!-- <section class="hero">
-        <div class="hero-content">
-            <h1>Welcome to Vedic Degree College</h1>
-            <p>Your one-stop platform for courses, results, notes, and campus updates.</p>
-            <div class="hero-buttons">
-                <a href="login.php" class="primary-btn">Get Started</a>
-                <a href="register.php" class="secondary-btn">Register</a>
-            </div>
-        </div>
-    </section> -->
     <div class="video-container">
         <video autoplay muted loop playsinline id="bg-video">
             <source src="./assets/videos/vedic_video.mp4" type="video/mp4">
@@ -146,7 +140,7 @@ include "./includes/db.php";
             <div class="card">
                 <img src="assets/images/treeplantation.jpg" alt="">
                 <div class="card-content">
-                    <h3>Tree Plantation Drive</h3>
+                    <h3>Plantation Drive</h3>
                     <a href="#">Learn More</a>
                 </div>
             </div>
@@ -162,7 +156,7 @@ include "./includes/db.php";
             <div class="card">
                 <img src="assets/images/Vijostav.jpg" alt="">
                 <div class="card-content">
-                    <h3>Vijostav</h3>
+                    <h3>Vijayostav</h3>
                     <a href="#">Learn More</a>
                 </div>
             </div>
@@ -177,6 +171,25 @@ include "./includes/db.php";
     <section id="courses">
         <?php include "./pages/courses.php"; ?>
     </section>
+    <!------------------------ Image Slider -->
+    <div class="slider">
+        <div class="slides">
+            <?php
+            require_once "includes/db.php";
+            $images = mysqli_query($conn, "SELECT * FROM slider_images ORDER BY created_at DESC LIMIT 5");
+            $first = true;
+
+            while ($img = mysqli_fetch_assoc($images)) {
+                $active = $first ? "active" : "";
+                echo "<img src='assets/images/{$img['image']}' class='slide $active'>";
+                $first = false;
+            }
+            ?>
+        </div>
+
+        <button class="prev" onclick="prevSlide()">❮</button>
+        <button class="next" onclick="nextSlide()">❯</button>
+    </div>
 
     <section class="academics-section">
         <div class="container">
@@ -229,10 +242,10 @@ include "./includes/db.php";
             <div class="card">
                 <h3>Academic Support & Resources</h3>
                 <ul class="support">
-                    <li>Well-equipped library</li>
                     <li>Faculty mentorship</li>
                     <li>Remedial courses</li>
                     <li>Career guidance</li>
+                    <li>24 x 7 Doubt Support</li>
                 </ul>
             </div>
 
@@ -248,35 +261,6 @@ include "./includes/db.php";
         </div>
     </section>
 
-
-    <!-- Image Slider -->
-    <div class="slider">
-        <div class="slides">
-            <?php
-            require_once "includes/db.php";
-            $images = mysqli_query($conn, "SELECT * FROM slider_images ORDER BY created_at DESC LIMIT 5");
-            $first = true;
-
-            while ($img = mysqli_fetch_assoc($images)) {
-                $active = $first ? "active" : "";
-                echo "<img src='assets/images/{$img['image']}' class='slide $active'>";
-                $first = false;
-            }
-            ?>
-        </div>
-
-        <button class="prev" onclick="prevSlide()">❮</button>
-        <button class="next" onclick="nextSlide()">❯</button>
-    </div>
-
-    <!-- About -->
-    <section id="about" class="section">
-        <h2>About Our College</h2>
-        <p>
-            We are committed to providing quality education and a supportive learning environment.
-            This portal helps students, faculty, and administrators stay connected digitally.
-        </p>
-    </section>
     <img src="assets/images/chairman sir.jpg" alt="" style="object-fit: cover; width: 100%;" />
     <section class="message-section">
         <div class="container">
@@ -310,7 +294,7 @@ include "./includes/db.php";
                 <!-- Principal Message -->
                 <div class="message-card">
                     <div class="message-image">
-                        <img src="assets/images/faculti/Principal.png" alt="Principal">
+                        <img src="assets/images/faculty/Principal Maam.png" alt="Principal">
                     </div>
                     <div class="message-content">
                         <h3>Principal's Message</h3>
@@ -330,10 +314,12 @@ include "./includes/db.php";
         </div>
     </section>
 
+    <section id="contact" style="margin-top: 30px;">
 
-    <?php
-    include "./pages/contact.php";
-    ?>
+        <?php
+        include "./pages/contact.php";
+        ?>
+    </section>
 
 </body>
 <!-- Footer -->

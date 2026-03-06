@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once "../includes/db.php";
+if ($_SESSION['role'] != 'admin') die("Access denied");
 
 // if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
 //     header("Location: ../login.php");
@@ -42,6 +43,7 @@ $news = mysqli_query($conn, "SELECT * FROM news ORDER BY created_at DESC");
     </div>
     <main>
         <aside>
+            <h2>Quick Links</h2>
             <h2>Users</h2>
             <ul>
                 <li><a href="?students">Students</a></li>
@@ -50,13 +52,12 @@ $news = mysqli_query($conn, "SELECT * FROM news ORDER BY created_at DESC");
             </ul>
             <h2>academics</h2>
             <ul>
-                <li><a href="?streams">Streams</a></li>
                 <li><a href="?department">Departments</a></li>
                 <li><a href="?courses">Courses</a></li>
             </ul>
             <h2>Quiz</h2>
-            <h2>news</h2>
-            <h2>Home Page Slider</h2>
+            <h2><a href="?news">news</a></h2>
+            <h2><a href="?slider">Home Page Slider</a></h2>
         </aside>
 
         <div class="container">
@@ -75,7 +76,7 @@ $news = mysqli_query($conn, "SELECT * FROM news ORDER BY created_at DESC");
             }
 
             if (isset($_GET['streams'])) {
-                include "./add_faculty.php";
+                include "./streams.php";
             }
 
             if (isset($_GET['courses'])) {
@@ -85,67 +86,16 @@ $news = mysqli_query($conn, "SELECT * FROM news ORDER BY created_at DESC");
             if (isset($_GET['users'])) {
                 include "./all_users.php";
             }
+            if (isset($_GET['news'])) {
+                include "./add_news.php";
+            }
+            if (isset($_GET['slider'])) {
+                include "./upload_slider.php";
+            }
             ?>
-            <div class="grid">
-
-                <!-- Add Department -->
 
 
 
-                <!-- Add Course -->
-
-
-                <!-- Add Faculty -->
-
-
-                <!-- Post News -->
-
-
-
-
-
-
-                <hr>
-
-
-
-            </div>
-
-            <br>
-
-            <!-- Users List -->
-
-
-            <!-- Courses List -->
-            <!-- <div class="card">
-                <h3>📚 Courses</h3>
-                <table>
-                    <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Action</th>
-                    </tr>
-                    <?php while ($c = mysqli_fetch_assoc($courses)) { ?>
-                        <tr>
-                            <td><?= htmlspecialchars($c['title']) ?></td>
-                            <td><?= htmlspecialchars($c['description']) ?></td>
-                            <td>
-                                <a class="btn danger" href="delete_course.php?id=<?= $c['id'] ?>" onclick="return confirm('Delete course?')">Delete</a>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                </table>
-            </div> -->
-
-            <!-- News List -->
-            <!-- <div class="card">
-                <h3>📰 Latest News</h3>
-                <ul>
-                    <?php while ($n = mysqli_fetch_assoc($news)) { ?>
-                        <li><strong><?= htmlspecialchars($n['title']) ?></strong> – <?= htmlspecialchars($n['content']) ?></li>
-                    <?php } ?>
-                </ul>
-            </div> -->
 
         </div>
     </main>

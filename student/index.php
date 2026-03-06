@@ -10,17 +10,24 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'student') {
 
 $userId = $_SESSION['user_id'];
 
-// Fetch student info
-$userQuery = mysqli_query($conn, "SELECT name FROM users WHERE id = $userId");
+// Fetch user info
+$userQuery = mysqli_query($conn, "SELECT * FROM users WHERE id = $userId");
 $user = mysqli_fetch_assoc($userQuery);
+$uemail = $user['email'];
 
-// Fetch enrolled courses
-$coursesQuery = mysqli_query($conn, "
-    SELECT c.title 
-    FROM courses c
-    JOIN enrollments e ON c.id = e.course_id
-    WHERE e.student_id = $userId
-");
+//Fetch student info
+$studentQuery = mysqli_query($conn, "SELECT * FROM students where email = '$uemail'");
+$student = mysqli_fetch_assoc($studentQuery);
+$sid = $student['student_id'];
+$did = $student['department_id'];
+$sem = $student['semester'];
+$img = $student['photo'];
+// Fetch courses
+$coursesQuery = mysqli_query($conn, "SELECT * FROM courses where department_id = $did and semester = $sem");
+
+//Fetch faculty details
+$facultyQuery = mysqli_query($conn, "SELECT * from faculty");
+$faculty = mysqli_fetch_assoc($facultyQuery);
 
 // Fetch marks
 $marksQuery = mysqli_query($conn, "
@@ -43,10 +50,30 @@ $notesQuery = mysqli_query($conn, "
 
 <head>
     <title>Student Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../assets/css/dashboard.css">
     <style>
         .header h2 {
             text-transform: capitalize;
+        }
+
+        .student_proflie_pic {
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: top;
+        }
+
+        .dept_img {
+            width: 100px;
+            background: #ffffff47;
+            border-radius: 20%;
+            padding: 10px;
+        }
+
+        .dept_img::after {
+            content: "Department of BCA";
         }
 
         aside h2 {
@@ -62,11 +89,12 @@ $notesQuery = mysqli_query($conn, "
         }
 
         .card {
-            background: white;
+            min-width: 300px;
+            min-height: 300px;
             padding: 15px;
             margin-bottom: 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgb(0 0 0 / 35%);
         }
 
         h3 {
@@ -99,30 +127,59 @@ $notesQuery = mysqli_query($conn, "
         <img src="../assets/images/logo.png" alt="logo" id="logo">
         <div style="display: flex;align-items: center;gap: 15px;">
             <h2>Welcome, <?= htmlspecialchars($user['name']) ?></h2>
-            <img src="../assets/images/students/profile.png" alt="profile picture" style="width: 60px;">
+            <img class="student_proflie_pic" src="../assets/images/students/<?= $img ?>" alt="profile picture" style="width: 60px;">
             <a href="../logout.php" class="logout" onclick="return confirm('Do you really want to logout?')">Logout</a>
         </div>
     </header>
     <main>
         <aside>
+            <div style="text-align: center;">
+                <?php
+                $logo_stmnt = mysqli_query($conn, "SELECT department_name,logo from department where department_id = $did");
+                $logo = mysqli_fetch_assoc($logo_stmnt);
+                echo "<img class='dept_img' src='../assets/images/department_logos/{$logo['logo']}' alt='department_logo'>";
+                ?>
+                <p style="margin: 0;"><?= $logo['department_name'] ?></p>
+            </div>
             <h2>Quick Links</h2>
-            <h2>Quiz</h2>
+            <a href="../pages/quiz.php?sid=<?= $sid ?>&sem=<?= $sem ?>" target="_blank">
+                <h2 class="special">Quiz</h2>
+            </a>
             <h2>My Teachers</h2>
             <h2>My classmates</h2>
             <h2>news</h2>
         </aside>
         <div class="container">
+            <!-- ----------------- notice board-------------------- -->
             <div class="card">
                 <h3>Notice Board</h3>
+                <p>No Notice yet </p>
             </div>
+            <!-- ----------------- Enrolled Courses-------------------- -->
             <div class="card">
                 <h3>📚 Enrolled Courses</h3>
-                <ul>
-                    <?php while ($course = mysqli_fetch_assoc($coursesQuery)) { ?>
-                        <li><?= htmlspecialchars($course['title']) ?></li>
-                    <?php } ?>
-                </ul>
-                <?php if (mysqli_num_rows($coursesQuery) == 0) echo "<p>No courses enrolled yet.</p>"; ?>
+                <?php if (mysqli_num_rows($coursesQuery) == 0)
+                    echo "<p>No courses enrolled yet.</p>";
+                else {
+                ?>
+                    <table>
+                        <thead>
+                            <th>Course Code</th>
+                            <th>Course Title</th>
+                        </thead>
+                        <tbody>
+                            <?php
+
+                            while ($course = mysqli_fetch_assoc($coursesQuery)) { ?>
+                                <tr>
+                                    <td><?= $course['course_code'] ?></td>
+                                    <td><?= $course['title'] ?></td>
+                                </tr>
+                            <?php } ?>
+
+                        </tbody>
+                    </table>
+                <?php } ?>
             </div>
 
             <div class="card">

@@ -1,5 +1,6 @@
 <?php
 require_once "../includes/db.php";
+if ($_SESSION['role'] != 'admin') die("Access denied");
 
 /* =========================
    HANDLE FORM SUBMISSION

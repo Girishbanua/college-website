@@ -107,6 +107,7 @@ main {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 }
 .card form {
   display: flex;
@@ -134,9 +135,10 @@ button {
   background: #111827;
   color: #fff;
   font-size: 12px;
+  cursor: pointer;
 }
 
-.danger {
+.danger:hover {
   background: #dc2626;
 }
 
@@ -163,4 +165,26 @@ thead {
 }
 td a {
   color: blue;
+}
+.alert {
+  position: absolute;
+  top: 0;
+  transform: translateY(-20px);
+  opacity: 0;
+  animation: slideDown 0.5s forwards;
+}
+
+@keyframes slideDown {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.error {
+  background: crimson;
+  color: white;
+}
+.success {
+  background: lightgreen;
+  color: white;
 }

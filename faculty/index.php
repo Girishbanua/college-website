@@ -19,7 +19,6 @@ $studentsQuery = mysqli_query($conn, "SELECT * from students");
 // Fetch faculty (simple list)
 $faculty = mysqli_query($conn, "SELECT * FROM faculty where faculty_code = 'FAC$facultyId'");
 
-
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +81,8 @@ $faculty = mysqli_query($conn, "SELECT * FROM faculty where faculty_code = 'FAC$
                 <h2><?= $row['first_name'] . " " . $row['last_name']  ?></h2>
                 <h3><?= $row['designation'] ?></h3>
                 <?php
-                $did = $row['department_id'];
+                $did = (int)$row['department_id'];
+                // echo gettype($did);
                 $stmnt2 = mysqli_query($conn, "SELECT department_name from department where department_id = $did");
                 $dept_name = mysqli_fetch_assoc($stmnt2);
                 ?>
@@ -95,7 +95,7 @@ $faculty = mysqli_query($conn, "SELECT * FROM faculty where faculty_code = 'FAC$
                 <li><a href="">Second Year</a></li>
                 <li><a href="">Third Year</a></li>
             </ul>
-            <h2>Quiz</h2>
+            <h2><a href="?quiz">Quiz</a></h2>
             <h2>news</h2>
         </aside>
         <div class="container">
@@ -129,7 +129,9 @@ $faculty = mysqli_query($conn, "SELECT * FROM faculty where faculty_code = 'FAC$
                     </select>
                     <label>Select Student</label>
                     <select name="student_id" required>
-                        <?php while ($student = mysqli_fetch_assoc($studentsQuery)) { ?>
+                        <?php
+                        $stmnt = mysqli_query($conn, "SELECT * from students where department_id = $did");
+                        while ($student = mysqli_fetch_assoc($stmnt)) { ?>
                             <option value="<?= $student['student_id'] ?>">
                                 <?= htmlspecialchars($student['student_name']) ?>
                             </option>
@@ -138,7 +140,7 @@ $faculty = mysqli_query($conn, "SELECT * FROM faculty where faculty_code = 'FAC$
 
                     <label>Select Course</label>
                     <?php
-                    $coursesQuery2 = mysqli_query($conn, "SELECT * FROM courses");
+                    $coursesQuery2 = mysqli_query($conn, "SELECT * FROM courses where department_id = $did");
                     ?>
                     <select name="course_id" required>
                         <?php while ($course = mysqli_fetch_assoc($coursesQuery2)) { ?>
@@ -227,6 +229,10 @@ $faculty = mysqli_query($conn, "SELECT * FROM faculty where faculty_code = 'FAC$
 
                         </tbody>
                     </table>
+            </div>
+            <div class="card">
+                <h2>Add Quiz Question</h2>
+                <?php include "./add_question.php"; ?>
             </div>
         </div>
     </main>

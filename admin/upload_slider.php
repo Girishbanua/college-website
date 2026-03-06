@@ -29,7 +29,7 @@ if (isset($_POST['upload'])) {
     ?>
         <div style="border:1px solid #ccc; padding:10px; text-align:center;">
             <img src="../assets/images/<?= $img['image'] ?>" width="180" height="100" style="object-fit:cover;"><br><br>
-            <a href="slider.php?delete=<?= $img['id'] ?>" onclick="return confirm('Delete this image?')" style="color:red;">Delete</a>
+            <a href="slider.php?delete=<?= $img['id'] ?>" class="btn danger" onclick="return confirm('Delete this image?')">Delete</a>
         </div>
     <?php } ?>
 </div>

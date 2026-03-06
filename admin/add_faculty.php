@@ -1,5 +1,6 @@
 <?php
 require_once "../includes/db.php";
+if ($_SESSION['role'] != 'admin') die("Access denied");
 
 if (isset($_POST['add_faculty'])) {
 
@@ -193,5 +194,44 @@ if (isset($_POST['add_faculty'])) {
 </div>
 
 <div class="card">
+    <h3>Our Faculties</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Faculty Code</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $stmnt = mysqli_query($conn, "SELECT * from faculty");
+            while ($row = mysqli_fetch_assoc($stmnt)) {
+                $code = $row['faculty_code'];
+                $fname = $row['first_name'] . " " . $row['last_name'];
+                //fetch department name from department table
+                $id = $row['department_id'];
+                $dep_stmnt = mysqli_query($conn, "Select * from department where department_id = $id");
+                $result = mysqli_fetch_assoc($dep_stmnt);
+                $dname = $result['department_name'];
 
+                $status = $row['status'];
+
+                echo "
+                <tr>
+                    <td>$code</td>
+                    <td>$fname</td>
+                    <td>$dname</td>
+                    <td>$status</td>
+                    <td><button onclick='confirm(`delete?`)'>delete</button></td>                    
+                </tr>
+                    
+                ";
+            }
+            ?>
+
+        </tbody>
+    </table>
 </div>

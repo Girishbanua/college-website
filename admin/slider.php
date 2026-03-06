@@ -1,6 +1,7 @@
 <?php
 require_once "../includes/db.php";
 //require_once "../includes/auth_check.php"; // ensure admin only
+if ($_SESSION['role'] != 'admin') die("Access denied");
 
 // Upload Image
 if (isset($_POST['upload'])) {
